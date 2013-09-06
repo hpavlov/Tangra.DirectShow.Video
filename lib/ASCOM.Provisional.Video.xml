@@ -4,151 +4,6 @@
         <name>ASCOM.Provisional.Video</name>
     </assembly>
     <members>
-        <member name="T:ASCOM.DeviceInterface.NamespaceDoc">
-            <summary>
-            Defines the ASCOM <see cref="T:ASCOM.DeviceInterface.IVideo"/> and <see cref="T:ASCOM.DeviceInterface.IVideoFrame"/> interfaces for working with astronomical video cameras
-            </summary>
-            <remarks>
-            The interfaces are designed with the following use cases in mind
-            <list type="bullet">
-            	<item><description>Instructing the camera to record a video file and save it on the file system</description></item>
-            	<item><description>Occationally obtaining individual video frames as the camera is running in order to help with focusing, frame rate adjustments, field identification and others.</description></item>
-            </list>
-            <p>Video cameras, unlike standard CCD cameras, are used to save video files. It is not practicle to try and display in realtime what the camera seas mostly for the following two reasons. Firstly the huge bandwidth 
-            that will be required to trasmit the images (25, 30 or sometimes more images per second) and seconly because of the performance impact on the driver and the hardware. Video is already very resource hungry
-            and implementing a separate streaming in the driver for realtime viewing by a client will make the system even more demanding for resources (RAM and CPU) that could affect the integrity of the video record (e.g. result in dropped frames) which is not desired and should be avoided.</p>
-            <p>Still the client will need to see what the camera is pointed to for example to work on the focusing so there is a need for viewing individual images produced by the video camera. This is done is by the client requesting
-            a single individual frame from the camera and doing this as many times as necessary.</p>
-            <p>There are broadly two types of video cameras regarding the way the images are captured by a computer - analogue and digital. Analogue cameras will usually require a video capture card and digital cameras will usually be connected to the computer via USB or FireWire port. 
-            Analogue video cameras output frames with a fixed frame rate that cannot be changed while the digital video cameras can have a variable frame rate. When it comes to exposure duration there are again two types of analogue video cameras - integrating and non integrating. 
-            The integrating video cameras have the shutter open for the duration of the exposure and after the exposure is completed they output the same video frame (the result from the exposure) with their supported frame rate and for the duration of another exposure. 
-            Non integrating video cameras have a fixed exposure duration that cannot be changed. Some integrating video cameras also offer exposures shorter than the frame rate interval. In this case the shutter is only open for the corresponding exposure time and the remaining time
-            for up to the frame rate duration the camera is not collecting light. Digital video cameras usually output a single frame for each exposure that they produce.</p>
-            <p>The ASCOM video camera interfaces are designed to support all these types of video cameras - analogue, digital, integrating and non integrating.</p>
-            </remarks>
-        </member>
-        <member name="T:ASCOM.DeviceInterface.VideoCameraFrameRate">
-            <summary>
-            ASCOM Video Camera supported frame rates
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.Digital">
-            <summary>
-            This is a digital camera or system that supports variable frame rates
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.Variable">
-            <summary>
-            This is a video camera that supports variable frame rates
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.PAL">
-            <summary>
-            25 frames per second (fps) corresponding to a <b>PAL</b> (colour) or <b>CCIR</b> (black and white) video standard
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.NTSC">
-            <summary>
-            29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b>b> (black and white) video standard
-            </summary>
-        </member>
-        <member name="T:ASCOM.DeviceInterface.VideoCameraState">
-            <summary>
-            ASCOM Video Camera status values
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraIdle">
-            <summary>
-            Camera status idle. The video camera expecting commands
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraRunning">
-            <summary>
-            Camera status running. The video is receiving signal and video frames are available for viewing or recording 
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraRecording">
-            <summary>
-            Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing
-            </summary>
-        </member>
-        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraError">
-            <summary>
-            Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a restart will be required to resolve the error condition
-            </summary>
-        </member>
-        <member name="T:ASCOM.DeviceInterface.IVideoFrame">
-            <summary>
-            Defines the IVideoFrame Interface
-            </summary>
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray">
-            <summary>
-            Returns a safearray of int of size <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> containing the pixel values from the video frame. 
-            </summary>
-            <remarks>
-            The application must inspect the Safearray parameters to determine the dimensions. 
-            <para>The value will be only populated when the video frame has been obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame"/> property. When the video frame
-            is obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant"/> property a NULL value must be returned. Do not throw an exception in this case.</para>
-            <para>For color or multispectral cameras, will produce an array of  <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
-            NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
-            <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixels in the array is the second pixels from the first horizontal row
-            and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
-            </remarks>
-            <value>The image array.</value>
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant">
-            <summary>
-            Returns a safearray of Variant of size <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> containing the pixel values from the last video frame. 
-            </summary>
-            <remarks>
-            The application must inspect the Safearray parameters to determine the dimensions. Note: This property should only be used from scripts due to the extremely high memory utilization on
-            large image arrays (26 bytes per pixel). Pixels values should be in Short, int, or Double format.
-            <para>The value will be only populated when the video frame has been obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant"/> property. When the video frame
-            is obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame"/> property a NULL value must be returned. Do not throw an exception in this case.</para>
-            <para>For color or multispectral cameras, will produce an array of <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
-            NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
-            <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixels in the array is the second pixels from the first horizontal row
-            and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
-            </remarks>
-            <value>The image array variant.</value>
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IVideoFrame.FrameNumber">
-            <summary>
-            Returns the frame number.
-            </summary>
-            <remarks>
-            The frame number of the first exposed frame may not be zero and is dependent on the device and/or the driver. The frame number increases with each acquired frame not with each requested frame by the client.
-            Must return -1 if frame numbering is not supported
-            </remarks>
-            <value>The frame number of the current video frame.</value>
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ExposureDuration">
-            <summary>
-            Returns the actual exposure duration in seconds (i.e. shutter open time).
-            </summary>
-            <remarks>
-            This may differ from the exposure time corresponding to the requested frame exposure due to shutter latency, camera timing precision, etc.
-            </remarks>
-            <value>The duration of the frame exposure.</value>
-            <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ExposureStartTime">
-            <summary>
-            Returns the actual exposure start time in the FITS-standard CCYY-MM-DDThh:mm:ss[.sss...] format, if supported.
-            </summary>
-            <value>The frame exposure start time.</value>
-            <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ImageInfo">
-            <summary>
-            Returns additional information associated with the video frame.
-            </summary>
-            <remarks><p style="color:red"><b>Must be implemented</b></p> This property must return an empty string if no additonal video frame information is supported. Please do not throw a 
-            <see cref="T:ASCOM.PropertyNotImplementedException"/>.
-            </remarks>
-            <value>A string in a well known format agreed by interested parties that represents any additional information associated with the video frame.</value>
-        </member>
         <member name="T:ASCOM.DeviceInterface.IVideo">
             <summary>
             Defines the IVideo Interface
@@ -229,7 +84,7 @@
             Displays an image configuration dialog that allows configuration of specialized image settings such as White or Colour Balance for example. 
             </summary>
             <exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the camera is not connected.</exception>
-            <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if ConfigureImage is not supported.</exception>
+            <exception cref="T:ASCOM.MethodNotImplementedException">Must throw an exception if ConfigureImage is not supported.</exception>
             <remarks>
             <para>This dialog is not intended to be used in unattended mode but can give great control over the image quality for some drivers and devices. The dialog may also allow 
             chaning settings such as Gamma and Gain that can be also controlled directly via the <see cref="T:ASCOM.DeviceInterface.IVideo"/> interface. If a client software 
@@ -944,6 +799,151 @@
             </summary>
             <remarks><p style="color:red"><b>Must be implemented</b></p> 
             </remarks>
+        </member>
+        <member name="T:ASCOM.DeviceInterface.NamespaceDoc">
+            <summary>
+            Defines the ASCOM <see cref="T:ASCOM.DeviceInterface.IVideo"/> and <see cref="T:ASCOM.DeviceInterface.IVideoFrame"/> interfaces for working with astronomical video cameras
+            </summary>
+            <remarks>
+            The interfaces are designed with the following use cases in mind
+            <list type="bullet">
+            	<item><description>Instructing the camera to record a video file and save it on the file system</description></item>
+            	<item><description>Occationally obtaining individual video frames as the camera is running in order to help with focusing, frame rate adjustments, field identification and others.</description></item>
+            </list>
+            <p>Video cameras, unlike standard CCD cameras, are used to save video files. It is not practicle to try and display in realtime what the camera seas mostly for the following two reasons. Firstly the huge bandwidth 
+            that will be required to trasmit the images (25, 30 or sometimes more images per second) and seconly because of the performance impact on the driver and the hardware. Video is already very resource hungry
+            and implementing a separate streaming in the driver for realtime viewing by a client will make the system even more demanding for resources (RAM and CPU) that could affect the integrity of the video record (e.g. result in dropped frames) which is not desired and should be avoided.</p>
+            <p>Still the client will need to see what the camera is pointed to for example to work on the focusing so there is a need for viewing individual images produced by the video camera. This is done is by the client requesting
+            a single individual frame from the camera and doing this as many times as necessary.</p>
+            <p>There are broadly two types of video cameras regarding the way the images are captured by a computer - analogue and digital. Analogue cameras will usually require a video capture card and digital cameras will usually be connected to the computer via USB or FireWire port. 
+            Analogue video cameras output frames with a fixed frame rate that cannot be changed while the digital video cameras can have a variable frame rate. When it comes to exposure duration there are again two types of analogue video cameras - integrating and non integrating. 
+            The integrating video cameras have the shutter open for the duration of the exposure and after the exposure is completed they output the same video frame (the result from the exposure) with their supported frame rate and for the duration of another exposure. 
+            Non integrating video cameras have a fixed exposure duration that cannot be changed. Some integrating video cameras also offer exposures shorter than the frame rate interval. In this case the shutter is only open for the corresponding exposure time and the remaining time
+            for up to the frame rate duration the camera is not collecting light. Digital video cameras usually output a single frame for each exposure that they produce.</p>
+            <p>The ASCOM video camera interfaces are designed to support all these types of video cameras - analogue, digital, integrating and non integrating.</p>
+            </remarks>
+        </member>
+        <member name="T:ASCOM.DeviceInterface.VideoCameraFrameRate">
+            <summary>
+            ASCOM Video Camera supported frame rates
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.Digital">
+            <summary>
+            This is a digital camera or system that supports variable frame rates
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.Variable">
+            <summary>
+            This is a video camera that supports variable frame rates
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.PAL">
+            <summary>
+            25 frames per second (fps) corresponding to a <b>PAL</b> (colour) or <b>CCIR</b> (black and white) video standard
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraFrameRate.NTSC">
+            <summary>
+            29.97  frames per second (fps) corresponding to an <b>NTSC</b> (colour) or <b>EIA</b>b> (black and white) video standard
+            </summary>
+        </member>
+        <member name="T:ASCOM.DeviceInterface.VideoCameraState">
+            <summary>
+            ASCOM Video Camera status values
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraIdle">
+            <summary>
+            Camera status idle. The video camera expecting commands
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraRunning">
+            <summary>
+            Camera status running. The video is receiving signal and video frames are available for viewing or recording 
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraRecording">
+            <summary>
+            Camera status recording. The video camera is recording video to the file system. Video frames are available for viewing
+            </summary>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.VideoCameraState.videoCameraError">
+            <summary>
+            Camera status error. The video camera is in a state of an error and cannot continue its operation. Usually a restart will be required to resolve the error condition
+            </summary>
+        </member>
+        <member name="T:ASCOM.DeviceInterface.IVideoFrame">
+            <summary>
+            Defines the IVideoFrame Interface
+            </summary>
+        </member>
+        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray">
+            <summary>
+            Returns a safearray of int of size <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> containing the pixel values from the video frame. 
+            </summary>
+            <remarks>
+            The application must inspect the Safearray parameters to determine the dimensions. 
+            <para>The value will be only populated when the video frame has been obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame"/> property. When the video frame
+            is obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant"/> property a NULL value must be returned. Do not throw an exception in this case.</para>
+            <para>For color or multispectral cameras, will produce an array of  <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
+            NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
+            <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixels in the array is the second pixels from the first horizontal row
+            and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
+            </remarks>
+            <value>The image array.</value>
+        </member>
+        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant">
+            <summary>
+            Returns a safearray of Variant of size <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> containing the pixel values from the last video frame. 
+            </summary>
+            <remarks>
+            The application must inspect the Safearray parameters to determine the dimensions. Note: This property should only be used from scripts due to the extremely high memory utilization on
+            large image arrays (26 bytes per pixel). Pixels values should be in Short, int, or Double format.
+            <para>The value will be only populated when the video frame has been obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant"/> property. When the video frame
+            is obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame"/> property a NULL value must be returned. Do not throw an exception in this case.</para>
+            <para>For color or multispectral cameras, will produce an array of <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
+            NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
+            <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixels in the array is the second pixels from the first horizontal row
+            and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
+            </remarks>
+            <value>The image array variant.</value>
+        </member>
+        <member name="P:ASCOM.DeviceInterface.IVideoFrame.FrameNumber">
+            <summary>
+            Returns the frame number.
+            </summary>
+            <remarks>
+            The frame number of the first exposed frame may not be zero and is dependent on the device and/or the driver. The frame number increases with each acquired frame not with each requested frame by the client.
+            Must return -1 if frame numbering is not supported
+            </remarks>
+            <value>The frame number of the current video frame.</value>
+        </member>
+        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ExposureDuration">
+            <summary>
+            Returns the actual exposure duration in seconds (i.e. shutter open time).
+            </summary>
+            <remarks>
+            This may differ from the exposure time corresponding to the requested frame exposure due to shutter latency, camera timing precision, etc.
+            </remarks>
+            <value>The duration of the frame exposure.</value>
+            <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
+        </member>
+        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ExposureStartTime">
+            <summary>
+            Returns the actual exposure start time in the FITS-standard CCYY-MM-DDThh:mm:ss[.sss...] format, if supported.
+            </summary>
+            <value>The frame exposure start time.</value>
+            <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if not supported</exception>
+        </member>
+        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ImageInfo">
+            <summary>
+            Returns additional information associated with the video frame.
+            </summary>
+            <remarks><p style="color:red"><b>Must be implemented</b></p> This property must return an empty string if no additonal video frame information is supported. Please do not throw a 
+            <see cref="T:ASCOM.PropertyNotImplementedException"/>.
+            </remarks>
+            <value>A string in a well known format agreed by interested parties that represents any additional information associated with the video frame.</value>
         </member>
     </members>
 </doc>

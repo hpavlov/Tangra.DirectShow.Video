@@ -98,10 +98,6 @@
     <Reference Include="DirectShowLib-2005">
       <HintPath>lib\DirectShowLib-2005.dll</HintPath>
     </Reference>
-    <Reference Include="Koyash.VideoUtilities, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>lib\Koyash.VideoUtilities.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Configuration.Install" />

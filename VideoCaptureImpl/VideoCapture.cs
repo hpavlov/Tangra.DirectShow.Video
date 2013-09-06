@@ -27,8 +27,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using ASCOM.DeviceInterface;
 using ASCOM.DirectShow.Properties;
+using ASCOM.Utilities.Video;
 using DirectShowLib;
-using Koyash.VideoUtilities;
 
 namespace ASCOM.DirectShow.VideoCaptureImpl
 {
@@ -43,7 +43,7 @@ namespace ASCOM.DirectShow.VideoCaptureImpl
 		private int imageWidth;
 		private int imageHeight;
 
-		private Koyash.VideoUtilities.ICameraImage cameraImageHelper = new Koyash.VideoUtilities.CameraImage();
+		private ICameraImage cameraImageHelper = new CameraImage();
 
 		private VideoCameraState cameraState = VideoCameraState.videoCameraIdle;
 
