@@ -204,6 +204,7 @@ namespace ASCOM.DirectShow.VideoCaptureImpl
 					{
 						FrameNumber = frameId,
 						Pixels = pixels,
+						PreviewBitmap = (Bitmap)bmp.Clone(),
 						ImageLayout = Settings.Default.SimulatedImageLayout
 					};					
 				}

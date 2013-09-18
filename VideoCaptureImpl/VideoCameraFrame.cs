@@ -18,6 +18,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using ASCOM.DeviceInterface;
@@ -28,6 +29,7 @@ namespace ASCOM.DirectShow.VideoCaptureImpl
 	{
 		public object Pixels;
 		public long FrameNumber;
+		public Bitmap PreviewBitmap;
 
 		public VideoFrameLayout ImageLayout;
 	}
