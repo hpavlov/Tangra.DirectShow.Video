@@ -617,6 +617,30 @@ namespace ASCOM.DirectShow
 
 		///	<exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
 		///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
+		///	<exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gainmax is not supported</exception>
+		public short GammaMax
+		{
+			[DebuggerStepThrough]
+			get
+			{
+				throw new PropertyNotImplementedException("GainMax", false);
+			}
+		}
+
+		///	<exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+		///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
+		///	<exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
+		public short GammaMin
+		{
+			[DebuggerStepThrough]
+			get
+			{
+				throw new PropertyNotImplementedException("GainMin", false);
+			}
+		}
+
+		///	<exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
+		///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
 		///	<exception cref="T:ASCOM.InvalidValueException">Must throw an exception if not valid.</exception>
 		///	<exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gamma is not supported</exception>
 		public int Gamma
