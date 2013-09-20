@@ -33,10 +33,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
+using ASCOM.DeviceInterface.DirectShowVideo;
 using ASCOM.DirectShow;
 using ASCOM.DirectShow.Properties;
 using Microsoft.Win32;
-using ASCOM.DirectShow.VideoCaptureImpl;
 
 namespace ASCOM.DirectShow
 {
@@ -45,7 +45,7 @@ namespace ASCOM.DirectShow
 	[ComSourceInterfaces(typeof(IVideo))]
 	[Guid("809B906A-240F-4802-B54F-04C65D1EB3E8")]
 	[ProgId("ASCOM.DirectShow.Video")]
-	public class Video : IVideo
+	public class Video : DirectShowVideoBase, IVideo
 	{
 		/// <summary>
 		/// Category under which the device will be listed by the ASCOM Chooser
@@ -136,38 +136,11 @@ namespace ASCOM.DirectShow
 		}
 		#endregion
 
-		private VideoCaptureImpl.VideoCapture camera;
-
 		public Video()
 		{
 			Properties.Settings.Default.Reload();
 
-			camera = new VideoCaptureImpl.VideoCapture();
-		}
-
-		/// <summary>
-		/// Set True to connect to the device. Set False to disconnect from the device.
-		/// You can also read the property to check whether it is connected.
-		/// </summary>
-		/// <value><c>true</c> if connected; otherwise, <c>false</c>.</value>
-		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-		/// <remarks><p style="color:red"><b>Must be implemented</b></p>Do not use a NotConnectedException here, that exception is for use in other methods that require a connection in order to succeed.</remarks>
-		public bool Connected
-		{
-			get { return camera.IsConnected; }
-			set
-			{
-				if (value != camera.IsConnected)
-				{
-					if (value)
-					{
-						if (camera.LocateCaptureDevice())
-							camera.EnsureConnected();						
-					}
-					else
-						camera.EnsureDisconnected();
-				}
-			}
+			base.Initialize(Properties.Settings.Default);
 		}
 
 		/// <exception cref="T:ASCOM.NotConnectedException">If the device is not connected and this information is only available when connected.</exception>
@@ -208,47 +181,6 @@ namespace ASCOM.DirectShow
 			get { return DRIVER_DESCRIPTION; }
 		}
 
-		public string VideoCaptureDeviceName
-		{
-			get
-			{
-				return camera.DeviceName;
-			}
-		}
-
-		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-		public void SetupDialog()
-		{
-			using (frmSetupDialog setupDlg = new frmSetupDialog())
-			{
-				Form ownerForm = Application.OpenForms
-					.Cast<Form>()
-					.FirstOrDefault(x => x != null && x.GetType().FullName == "ASCOM.Utilities.ChooserForm");
-
-				if (ownerForm == null)
-					ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
-
-				setupDlg.StartPosition = FormStartPosition.CenterParent;
-
-				if (setupDlg.ShowDialog(ownerForm) == DialogResult.OK)
-				{
-					Properties.Settings.Default.Save();
-
-					camera.ReloadSettings();
-
-					return;
-				}
-				Properties.Settings.Default.Reload();
-			}
-		}
-
-		private void AssertConnected()
-		{
-			if (!camera.IsConnected)
-			    throw new ASCOM.NotConnectedException();
-		}
-
-
 		/// <exception cref="T:ASCOM.MethodNotImplementedException">Throws this exception if no actions are suported.</exception>
 		/// <exception cref="T:ASCOM.ActionNotImplementedException">It is intended that the SupportedActions method will inform clients 
 		/// of driver capabilities, but the driver must still throw an ASCOM.ActionNotImplemented exception if it is asked to 
@@ -267,42 +199,6 @@ namespace ASCOM.DirectShow
 			get
 			{
 				return new ArrayList();
-			}
-		}
-
-		public void Dispose()
-		{
-			if (camera != null && camera.IsConnected)
-			    camera.EnsureDisconnected();
-
-			camera = null;
-		}
-
-		private double GetCameraExposureFromFrameRate()
-		{
-			return 1000.0 / camera.FrameRate;
-		}
-
-		public double ExposureMax
-		{
-			get { return GetCameraExposureFromFrameRate(); }
-		}
-
-		public double ExposureMin
-		{
-			get { return GetCameraExposureFromFrameRate(); }
-		}
-
-		public VideoCameraFrameRate FrameRate
-		{
-			get
-			{
-				if (Math.Abs(camera.FrameRate - 29.97) < 0.5)
-					return VideoCameraFrameRate.NTSC;
-				else if (Math.Abs(camera.FrameRate - 25) < 0.5)
-					return VideoCameraFrameRate.PAL;
-				else
-					return VideoCameraFrameRate.Variable;
 			}
 		}
 
@@ -336,45 +232,6 @@ namespace ASCOM.DirectShow
 			}
 		}
 
-		/// <exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
-		/// <exception cref="T:ASCOM.InvalidOperationException">If called before any video frame has been taken</exception>	
-		public IVideoFrame LastVideoFrame
-		{
-			get
-			{
-				AssertConnected();
-
-				VideoCameraFrame cameraFrame;
-
-				if (camera.GetCurrentFrame(out cameraFrame))
-				{
-					VideoFrame rv = VideoFrame.CreateFrame(camera.ImageWidth, camera.ImageHeight, cameraFrame);
-					return rv;
-				}
-				else
-					throw new ASCOM.InvalidOperationException("No video frames are available.");
-			}
-		}
-
-		public IVideoFrame LastVideoFrameImageArrayVariant
-		{
-			get
-			{
-				AssertConnected();
-
-				VideoCameraFrame cameraFrame;
-
-				if (camera.GetCurrentFrame(out cameraFrame))
-				{
-					VideoFrame rv = VideoFrame.CreateFrameVariant(camera.ImageWidth, camera.ImageHeight, cameraFrame);
-					return rv;
-				}
-				else
-					throw new ASCOM.InvalidOperationException("No video frames are available.");
-			}
-		}
-
-
 		///	<exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the information is not available. (Some drivers may require an 
 		///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
 		/// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
@@ -384,14 +241,6 @@ namespace ASCOM.DirectShow
 			get
 			{
 				throw new PropertyNotImplementedException("SensorName", false);
-			}
-		}
-
-		public SensorType SensorType
-		{
-			get
-			{
-				return VideoCapture.SimulatedSensorType;
 			}
 		}
 
@@ -427,28 +276,6 @@ namespace ASCOM.DirectShow
 			}
 		}
 
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
-		public int Width
-		{
-			get
-			{
-				AssertConnected();
-
-				return camera.ImageWidth;
-			}
-		}
-
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if the value is not known</exception>
-		public int Height
-		{
-			get
-			{
-				AssertConnected();
-
-				return camera.ImageHeight;
-			}
-		}
-
 		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
 		/// <exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gainmin is not supported</exception>
 		public double PixelSizeY
@@ -457,106 +284,6 @@ namespace ASCOM.DirectShow
 			get
 			{
 				throw new PropertyNotImplementedException("PixelSizeY", false);
-			}
-		}
-
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
-		public int BitDepth
-		{
-			get
-			{
-				AssertConnected();
-
-				return camera.BitDepth;
-			}
-		}
-
-		public string VideoCodec
-		{
-			get
-			{
-				return camera.GetUsedAviFourCC();
-			}
-		}
-
-		public string VideoFileFormat
-		{
-			get { return "AVI"; }
-		}
-
-		public int VideoFramesBufferSize
-		{
-			get
-			{
-				return 1;
-			}
-		}
-
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if not connected.</exception>
-		///	<exception cref="T:ASCOM.InvalidOperationException">Must throw exception if the current camera state doesn't allow to begin recording a file.</exception>
-		///	<exception cref="T:ASCOM.DriverException">Must throw exception if there is any other problem as a result of which the recording cannot begin.</exception>
-		public string StartRecordingVideoFile(string PreferredFileName)
-		{
-			AssertConnected();
-
-			try
-			{
-				VideoCameraState currentState = camera.GetCurrentCameraState();
-
-				if (currentState == VideoCameraState.videoCameraRecording)
-					throw new InvalidOperationException("The camera is already recording.");
-				else if (currentState != VideoCameraState.videoCameraRunning)
-					throw new InvalidOperationException("The current state of the video camera doesn't allow a recording operation to begin right now.");
-
-				string directory = Path.GetDirectoryName(PreferredFileName);
-				string fileName = Path.GetFileName(PreferredFileName);
-
-				if (!Directory.Exists(directory))
-					Directory.CreateDirectory(fileName);
-
-				if (File.Exists(PreferredFileName))
-					throw new DriverException(string.Format("File '{0}' already exists. Video can be recorded only in a non existing file.", PreferredFileName));
-
-				return camera.StartRecordingVideoFile(PreferredFileName);
-			}
-			catch (Exception ex)
-			{
-				throw new DriverException("Error starting the recording: " + ex.Message, ex);
-			}
-		}
-
-
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw exception if not connected.</exception>
-		///	<exception cref="T:ASCOM.InvalidOperationException">Must throw exception if the current camera state doesn't allow to stop recording the file or no file is currently being recorded.</exception>
-		///	<exception cref="T:ASCOM.DriverException">Must throw exception if there is any other problem as result of which the recording cannot stop.</exception>
-		public void StopRecordingVideoFile()
-		{
-			AssertConnected();
-
-			try
-			{
-				VideoCameraState currentState = camera.GetCurrentCameraState();
-
-				if (currentState != VideoCameraState.videoCameraRecording)
-					throw new InvalidOperationException("The camera is currently not recording.");
-
-				camera.StopRecordingVideoFile();
-
-			}
-			catch (Exception ex)
-			{
-				throw new DriverException("Error stopping the recording: " + ex.Message, ex);
-			}
-		}
-
-		///	<exception cref="T:ASCOM.NotConnectedException">Must return an exception if the camera status is unavailable.</exception>
-		public VideoCameraState CameraState
-		{
-			get
-			{
-				AssertConnected();
-
-				return camera.GetCurrentCameraState();
 			}
 		}
 
@@ -668,21 +395,6 @@ namespace ASCOM.DirectShow
 			{
 				throw new PropertyNotImplementedException("Gammas", false);
 			}
-		}
-
-		public bool CanConfigureDeviceProperties
-		{
-			get { return true; }
-		}
-
-		///	<exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the camera is not connected.</exception>
-		///	<exception cref="T:ASCOM.MethodNotImplementedException">Must throw an exception if ConfigureImage is not supported.</exception>
-		[DebuggerStepThrough]
-		public void ConfigureDeviceProperties()
-		{
-			AssertConnected();
-
-			camera.ShowDeviceProperties();
 		}
 	}
 }

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using ASCOM;
+using ASCOM.DeviceInterface.DeviceInterface.DirectShowVideo;
 
 /************************
  * Do not modify this file. Do not delete this empty class definition.
@@ -26,7 +27,7 @@ namespace ASCOM.DirectShow.Properties
 {
 	[SettingsProvider(typeof(ASCOM.SettingsProvider))]
 	[ASCOM.DeviceId("ASCOM.DirectShow.Video", DeviceName = "Video Capture")]
-	internal sealed partial class Settings
+	internal sealed partial class Settings : DirectShowVideoSettings
 	{
 	}
 }
