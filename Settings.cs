@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Configuration;
 using ASCOM;
-using ASCOM.DeviceInterface.DeviceInterface.DirectShowVideo;
+using ASCOM.DeviceInterface.DirectShowVideo;
 
 /************************
  * Do not modify this file. Do not delete this empty class definition.

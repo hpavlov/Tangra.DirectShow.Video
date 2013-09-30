@@ -11,15 +11,6 @@
             <exception cref="T:ASCOM.NotConnectedException">Must throw an exception if the camera is not connected.</exception>
             <exception cref="T:ASCOM.MethodNotImplementedException">Must throw an exception if ConfigureImage is not supported.</exception>
         </member>
-        <member name="M:ASCOM.DeviceInterface.DirectShowVideo.frmSetupDialog.CreateFilter(System.Guid,System.String)">
-            <summary>
-            Enumerates all filters of the selected category and returns the IBaseFilter for the 
-            filter described in friendlyname
-            </summary>
-            <param name="category">Category of the filter</param>
-            <param name="friendlyname">Friendly name of the filter</param>
-            <returns>IBaseFilter for the device</returns>
-        </member>
         <member name="F:ASCOM.DeviceInterface.DirectShowVideo.frmSetupDialog.components">
             <summary>
             Required designer variable.
@@ -34,6 +25,32 @@
         <member name="M:ASCOM.DeviceInterface.DirectShowVideo.frmSetupDialog.InitializeComponent">
             <summary>
             Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="M:ASCOM.DeviceInterface.DirectShowVideo.ucDirectShowVideoSettings.CreateFilter(System.Guid,System.String)">
+            <summary>
+            Enumerates all filters of the selected category and returns the IBaseFilter for the 
+            filter described in friendlyname
+            </summary>
+            <param name="category">Category of the filter</param>
+            <param name="friendlyname">Friendly name of the filter</param>
+            <returns>IBaseFilter for the device</returns>
+        </member>
+        <member name="F:ASCOM.DeviceInterface.DirectShowVideo.ucDirectShowVideoSettings.components">
+            <summary> 
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:ASCOM.DeviceInterface.DirectShowVideo.ucDirectShowVideoSettings.Dispose(System.Boolean)">
+            <summary> 
+            Clean up any resources being used.
+            </summary>
+            <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        </member>
+        <member name="M:ASCOM.DeviceInterface.DirectShowVideo.ucDirectShowVideoSettings.InitializeComponent">
+            <summary> 
+            Required method for Designer support - do not modify 
             the contents of this method with the code editor.
             </summary>
         </member>

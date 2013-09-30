@@ -13,7 +13,7 @@ namespace ASCOM.DirectShow.Properties {
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "10.0.0.0")]
-	internal sealed partial class Settings : global::ASCOM.DeviceInterface.DeviceInterface.DirectShowVideo.DirectShowVideoSettings
+	internal sealed partial class Settings : global::ASCOM.DeviceInterface.DirectShowVideo.DirectShowVideoSettings
 	{        
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
