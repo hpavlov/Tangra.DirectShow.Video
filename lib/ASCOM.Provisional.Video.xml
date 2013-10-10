@@ -83,31 +83,16 @@
             </remarks>
             <value>The image array.</value>
         </member>
-        <member name="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant">
-            <summary>
-            Returns a safearray of Variant of size <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> containing the pixel values from the last video frame. 
-            </summary>
-            <remarks>
-            The application must inspect the Safearray parameters to determine the dimensions. Note: This property should only be used from scripts due to the extremely high memory utilization on
-            large image arrays (26 bytes per pixel). Pixels values should be in Short, int, or Double format.
-            <para>The value will be only populated when the video frame has been obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant"/> property. When the video frame
-            is obtained from the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame"/> property a NULL value must be returned. Do not throw an exception in this case.</para>
-            <para>For color or multispectral cameras, will produce an array of <see cref="P:ASCOM.DeviceInterface.IVideo.Width"/> * <see cref="P:ASCOM.DeviceInterface.IVideo.Height"/> *
-            NumPlanes.  If the application cannot handle multispectral images, it should use just the first plane.</para>
-            <para>The pixels in the array start from the top left part of the image and are listed by horizontal lines/rows. The second pixels in the array is the second pixels from the first horizontal row
-            and the second last pixel in the array is the second last pixels from the last horizontal row.</para>
-            </remarks>
-            <value>The image array variant.</value>
-        </member>
         <member name="P:ASCOM.DeviceInterface.IVideoFrame.PreviewBitmap">
             <summary>
-            Returns a preview bitmap for the last video frame. 
+            Returns a HBITMAP handle to a preview bitmap for the last video frame. 
             </summary>
             <remarks>
-            <p style="color:red"><b>Must be implemented</b></p> The application can use this bitmap to show a preview image of the last video frame when required. This is a convenience property for 
+            <p style="color:red"><b>Must be implemented</b></p> The application can use this handle to show a preview image of the last video frame when required. This is a convenience property for 
             those applications that don't require to process the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> or <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant"/>
             but usually only adjust the video camera settings and then record a video file. 
             <para>When a 24bit RGB image can be returned by the driver this should be the preferred format. </para>
+            <para>A .NET client can make a call to <see cref="M:System.Drawing.Image.FromHbitmap(System.IntPtr)"/> to convert the HBITMAP handle to a displayable bitmap.</para>
             </remarks>
             <value>The preview bitmap image.</value>
         </member>
@@ -393,18 +378,6 @@
             <value>The video frame.</value>
             <exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
             <exception cref="T:ASCOM.InvalidOperationException">If called before any video frame has been taken</exception>	
-        </member>
-        <member name="P:ASCOM.DeviceInterface.IVideo.LastVideoFrameImageArrayVariant">
-            <summary>
-            Returns a <see cref="T:ASCOM.DeviceInterface.IVideoFrame"/> with its <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArrayVariant"/> property populated. 
-            </summary>
-            <remarks>
-            The <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> property of the video frame will not be populated. Use the <see cref="P:ASCOM.DeviceInterface.IVideo.LastVideoFrame"/> property
-            to obtain a video frame that has the <see cref="P:ASCOM.DeviceInterface.IVideoFrame.ImageArray"/> populated.
-            </remarks>
-            <value>The video frame.</value>
-            <exception cref="T:ASCOM.NotConnectedException">Must throw exception if data unavailable.</exception>
-            <exception cref="T:ASCOM.InvalidOperationException">If called before any video frame has been taken</exception>			
         </member>
         <member name="P:ASCOM.DeviceInterface.IVideo.SensorName">
             <summary>
