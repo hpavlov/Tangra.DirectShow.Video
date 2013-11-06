@@ -1,7 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ASCOM.DirectShow.Video", "ASCOM.DirectShow.Video.csproj", "{3390E16A-BFD6-4A68-ADA9-4E43AF4A5BB9}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TACOS.DirectShow.Video", "TACOS.DirectShow.Video.csproj", "{3390E16A-BFD6-4A68-ADA9-4E43AF4A5BB9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TACOS.DirectShowVideoBase", "TACOS.DirectShowVideoBase\TACOS.DirectShowVideoBase.csproj", "{FABCE39A-4701-4FEE-B452-BB4D348BFC26}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -19,6 +21,12 @@ Global
 		{3390E16A-BFD6-4A68-ADA9-4E43AF4A5BB9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3390E16A-BFD6-4A68-ADA9-4E43AF4A5BB9}.Release|x86.ActiveCfg = Release|x86
 		{3390E16A-BFD6-4A68-ADA9-4E43AF4A5BB9}.Release|x86.Build.0 = Release|x86
+		{FABCE39A-4701-4FEE-B452-BB4D348BFC26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABCE39A-4701-4FEE-B452-BB4D348BFC26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABCE39A-4701-4FEE-B452-BB4D348BFC26}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FABCE39A-4701-4FEE-B452-BB4D348BFC26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABCE39A-4701-4FEE-B452-BB4D348BFC26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FABCE39A-4701-4FEE-B452-BB4D348BFC26}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

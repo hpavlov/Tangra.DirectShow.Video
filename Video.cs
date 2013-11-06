@@ -33,10 +33,10 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.DeviceInterface;
-using ASCOM.DeviceInterface.DirectShowVideo;
 using ASCOM.DirectShow;
 using ASCOM.DirectShow.Properties;
 using Microsoft.Win32;
+using TACOS.DirectShowVideoBase.DirectShowVideo;
 
 namespace ASCOM.DirectShow
 {
@@ -44,7 +44,7 @@ namespace ASCOM.DirectShow
 	[ClassInterface(ClassInterfaceType.None)]
 	[ComSourceInterfaces(typeof(IVideo))]
 	[Guid("809B906A-240F-4802-B54F-04C65D1EB3E8")]
-	[ProgId("ASCOM.DirectShow.Video")]
+	[ProgId("TACOS.DirectShow.Video")]
 	public class Video : DirectShowVideoBase, IVideo
 	{
 		/// <summary>
@@ -56,12 +56,12 @@ namespace ASCOM.DirectShow
 		/// ASCOM DeviceID (COM ProgID) for this driver.
 		/// The DeviceID is used by ASCOM applications to load the driver at runtime.
 		/// </summary>
-		private static string DRIVER_ID = "ASCOM.DirectShow.Video";
+		private static string DRIVER_ID = "TACOS.DirectShow.Video";
 
 		/// <summary>
 		/// Driver description that displays in the ASCOM Chooser.
 		/// </summary>
-		private static string DRIVER_DESCRIPTION = "Video Capture";
+		private static string DRIVER_DESCRIPTION = "TACOS Video Capture";
 
 		#region ASCOM Registration
 		//
@@ -370,7 +370,7 @@ namespace ASCOM.DirectShow
 		///	active <see cref="P:ASCOM.DeviceInterface.IVideo.Connected">connection</see> in order to retrieve necessary information from the camera.)</exception>
 		///	<exception cref="T:ASCOM.InvalidValueException">Must throw an exception if not valid.</exception>
 		///	<exception cref="T:ASCOM.PropertyNotImplementedException">Must throw an exception if gamma is not supported</exception>
-		public int Gamma
+		public short Gamma
 		{
 			[DebuggerStepThrough]
 			get
