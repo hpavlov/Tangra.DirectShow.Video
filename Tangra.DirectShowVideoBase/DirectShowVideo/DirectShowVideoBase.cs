@@ -37,6 +37,7 @@ using ASCOM;
 using ASCOM.DeviceInterface;
 using Tangra.DirectShowVideoBase.DirectShowVideo;
 using Microsoft.Win32;
+using Tangra.DirectShowVideoBase.DirectShowVideo.Utils;
 using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
 using InvalidOperationException = System.InvalidOperationException;
 
@@ -89,10 +90,10 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
 		public void SetupDialog()
 		{
-			CallInMainAppFormThread(() => SetupDialogInternal());
+			UIThreadCaller.CallInUIThread((frm) => SetupDialogInternal(frm));
 		}
 
-		private void SetupDialogInternal()
+		private void SetupDialogInternal(IWin32Window form)
 		{
 			string version = "1.0";
 			try
@@ -104,12 +105,12 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 			
 			using (var setupDlg = new frmSetupDialog(settings, version))
 			{
-				Form ownerForm = Application.OpenForms
+				IWin32Window ownerForm = Application.OpenForms
 					.Cast<Form>()
 					.FirstOrDefault(x => x != null && x.GetType().FullName == "ASCOM.Utilities.ChooserForm");
 
 				if (ownerForm == null)
-					ownerForm = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
+					ownerForm = form;
 
 				setupDlg.StartPosition = FormStartPosition.CenterParent;
 
@@ -319,73 +320,7 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 		{
 			AssertConnected();
 
-			CallInMainAppFormThread(() => camera.ShowDeviceProperties());
-		}
-
-		private void CallInMainAppFormThread(Action action)
-		{
-			Form appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null);
-			if (appFormWithMessageLoop != null)
-			{
-				if (appFormWithMessageLoop.InvokeRequired)
-					appFormWithMessageLoop.Invoke(action);
-				else
-					action.Invoke();
-			}
-			else if (!Application.MessageLoop)
-			{
-				if (syncContext == null)
-				{
-					ThreadPool.QueueUserWorkItem(RunAppThread);
-					while (syncContext == null)
-						Thread.Sleep(10);
-				}
-
-				if (syncContext != null)
-					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(); }), null);
-				else
-					action.Invoke();
-			}
-			else
-			{
-				if (syncContext == null)
-					syncContext = new WindowsFormsSynchronizationContext();
-
-				if (syncContext != null)
-					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(); }), null);
-				else
-					action.Invoke();
-			}
-		}
-
-		private static WindowsFormsSynchronizationContext syncContext;
-
-		private static void RunAppThread(object state)
-		{
-			var ownMessageLoopMainForm = new Form();
-			ownMessageLoopMainForm.ShowInTaskbar = false;
-			ownMessageLoopMainForm.Width = 0;
-			ownMessageLoopMainForm.Height = 0;
-			ownMessageLoopMainForm.Load += ownerForm_Load;
-
-			Application.Run(ownMessageLoopMainForm);
-
-			if (syncContext != null)
-			{
-				MessageBox.Show("DirectShowVideoBase: Disposing WindowsFormsSynchronizationContext.");
-				syncContext.Dispose();
-				syncContext = null;
-			}
-		}
-
-		static void ownerForm_Load(object sender, EventArgs e)
-		{
-			Form form = (Form)sender;
-			form.Left = -5000;
-			form.Top = -5000;
-			form.Hide();
-
-			syncContext = new WindowsFormsSynchronizationContext();
+			UIThreadCaller.CallInUIThread((x) => camera.ShowDeviceProperties());
 		}
 	}
 }

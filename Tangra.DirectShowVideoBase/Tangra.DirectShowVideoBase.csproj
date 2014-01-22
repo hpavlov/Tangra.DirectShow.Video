@@ -78,6 +78,7 @@
     <Compile Include="DirectShowVideo\ucDirectShowVideoSettings.designer.cs">
       <DependentUpon>ucDirectShowVideoSettings.cs</DependentUpon>
     </Compile>
+    <Compile Include="DirectShowVideo\Utils\UIThreadCaller.cs" />
     <Compile Include="DirectShowVideo\VideoCaptureImpl\CrossbarHelper.cs" />
     <Compile Include="DirectShowVideo\VideoCaptureImpl\DirectShowCapture.cs" />
     <Compile Include="DirectShowVideo\VideoCaptureImpl\NonBlockingLock.cs" />
