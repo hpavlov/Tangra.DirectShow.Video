@@ -31,6 +31,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Threading;
 using System.Windows.Forms;
 using ASCOM;
 using ASCOM.DeviceInterface;
@@ -84,8 +85,14 @@ namespace TACOS.DirectShowVideoBase.DirectShowVideo
 			}
 		}
 
+
 		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
 		public void SetupDialog()
+		{
+			CallInMainAppFormThread(() => SetupDialogInternal());
+		}
+
+		private void SetupDialogInternal()
 		{
 			string version = "1.0";
 			try
@@ -312,7 +319,73 @@ namespace TACOS.DirectShowVideoBase.DirectShowVideo
 		{
 			AssertConnected();
 
-			camera.ShowDeviceProperties();
+			CallInMainAppFormThread(() => camera.ShowDeviceProperties());
+		}
+
+		private void CallInMainAppFormThread(Action action)
+		{
+			Form appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null);
+			if (appFormWithMessageLoop != null)
+			{
+				if (appFormWithMessageLoop.InvokeRequired)
+					appFormWithMessageLoop.Invoke(action);
+				else
+					action.Invoke();
+			}
+			else if (!Application.MessageLoop)
+			{
+				if (syncContext == null)
+				{
+					ThreadPool.QueueUserWorkItem(RunAppThread);
+					while (syncContext == null)
+						Thread.Sleep(10);
+				}
+
+				if (syncContext != null)
+					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(); }), null);
+				else
+					action.Invoke();
+			}
+			else
+			{
+				if (syncContext == null)
+					syncContext = new WindowsFormsSynchronizationContext();
+
+				if (syncContext != null)
+					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(); }), null);
+				else
+					action.Invoke();
+			}
+		}
+
+		private static WindowsFormsSynchronizationContext syncContext;
+
+		private static void RunAppThread(object state)
+		{
+			var ownMessageLoopMainForm = new Form();
+			ownMessageLoopMainForm.ShowInTaskbar = false;
+			ownMessageLoopMainForm.Width = 0;
+			ownMessageLoopMainForm.Height = 0;
+			ownMessageLoopMainForm.Load += ownerForm_Load;
+
+			Application.Run(ownMessageLoopMainForm);
+
+			if (syncContext != null)
+			{
+				MessageBox.Show("DirectShowVideoBase: Disposing WindowsFormsSynchronizationContext.");
+				syncContext.Dispose();
+				syncContext = null;
+			}
+		}
+
+		static void ownerForm_Load(object sender, EventArgs e)
+		{
+			Form form = (Form)sender;
+			form.Left = -5000;
+			form.Top = -5000;
+			form.Hide();
+
+			syncContext = new WindowsFormsSynchronizationContext();
 		}
 	}
 }

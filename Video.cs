@@ -43,8 +43,8 @@ namespace ASCOM.DirectShow
 	[ComVisible(true)]
 	[ClassInterface(ClassInterfaceType.None)]
 	[ComSourceInterfaces(typeof(IVideo))]
-	[Guid("809B906A-240F-4802-B54F-04C65D1EB3E8")]
-	[ProgId("TACOS.DirectShow.Video")]
+	[Guid("A53BFCE5-D453-4D33-977E-D8CE3BD4979C")]
+	[ProgId("Tangra.DirectShow.Video")]
 	public class Video : DirectShowVideoBase, IVideo
 	{
 		/// <summary>
@@ -56,12 +56,12 @@ namespace ASCOM.DirectShow
 		/// ASCOM DeviceID (COM ProgID) for this driver.
 		/// The DeviceID is used by ASCOM applications to load the driver at runtime.
 		/// </summary>
-		private static string DRIVER_ID = "TACOS.DirectShow.Video";
+		private static string DRIVER_ID = "Tangra.DirectShow.Video";
 
 		/// <summary>
 		/// Driver description that displays in the ASCOM Chooser.
 		/// </summary>
-		private static string DRIVER_DESCRIPTION = "TACOS Video Capture";
+		private static string DRIVER_DESCRIPTION = "Tangra Video Capture";
 
 		#region ASCOM Registration
 		//
