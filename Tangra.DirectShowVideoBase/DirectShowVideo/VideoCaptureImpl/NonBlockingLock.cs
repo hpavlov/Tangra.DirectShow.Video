@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
+namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 {
 	internal class NonBlockingLock
 	{

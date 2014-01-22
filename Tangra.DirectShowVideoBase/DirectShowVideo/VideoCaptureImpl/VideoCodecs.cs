@@ -21,7 +21,7 @@ using System.Linq;
 using System.Text;
 using DirectShowLib;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
+namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 {
 	internal class DsDeviceNameAttribute : Attribute
 	{

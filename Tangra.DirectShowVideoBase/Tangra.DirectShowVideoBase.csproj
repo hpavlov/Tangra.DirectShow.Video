@@ -7,8 +7,8 @@
     <ProjectGuid>{FABCE39A-4701-4FEE-B452-BB4D348BFC26}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>TACOS.DirectShowVideoBase</RootNamespace>
-    <AssemblyName>TACOS.DirectShowVideoBase</AssemblyName>
+    <RootNamespace>Tangra.DirectShowVideoBase</RootNamespace>
+    <AssemblyName>Tangra.DirectShowVideoBase</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile>Client</TargetFrameworkProfile>

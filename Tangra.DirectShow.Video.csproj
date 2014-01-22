@@ -8,8 +8,8 @@
     <ProjectGuid>{3390E16A-BFD6-4A68-ADA9-4E43AF4A5BB9}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>ASCOM.DirectShow</RootNamespace>
-    <AssemblyName>ASCOM.DirectShow.Video</AssemblyName>
+    <RootNamespace>Tangra.DirectShow</RootNamespace>
+    <AssemblyName>Tangra.DirectShow.Video</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <UpgradeBackupLocation>
@@ -159,9 +159,9 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="TACOS.DirectShowVideoBase\TACOS.DirectShowVideoBase.csproj">
+    <ProjectReference Include="Tangra.DirectShowVideoBase\Tangra.DirectShowVideoBase.csproj">
       <Project>{fabce39a-4701-4fee-b452-bb4d348bfc26}</Project>
-      <Name>TACOS.DirectShowVideoBase</Name>
+      <Name>Tangra.DirectShowVideoBase</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

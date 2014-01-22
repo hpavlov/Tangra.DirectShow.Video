@@ -35,12 +35,12 @@ using System.Threading;
 using System.Windows.Forms;
 using ASCOM;
 using ASCOM.DeviceInterface;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
 using Microsoft.Win32;
-using TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
+using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
 using InvalidOperationException = System.InvalidOperationException;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo
+namespace Tangra.DirectShowVideoBase.DirectShowVideo
 {
 	public abstract class DirectShowVideoBase
 	{

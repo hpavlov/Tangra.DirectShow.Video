@@ -28,11 +28,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
-using TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
 using DirectShowLib;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
+namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 {
 	internal class DirectShowCapture : ISampleGrabberCB, IDisposable
 	{

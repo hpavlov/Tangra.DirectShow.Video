@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo
+namespace Tangra.DirectShowVideoBase.DirectShowVideo
 {
 	public class DirectShowVideoSettings : System.Configuration.ApplicationSettingsBase
 	{
@@ -56,11 +56,11 @@ namespace TACOS.DirectShowVideoBase.DirectShowVideo
 		[global::System.Configuration.UserScopedSettingAttribute()]
 		[global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
 		[global::System.Configuration.DefaultSettingValueAttribute("Color")]
-		public global::TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl.VideoFrameLayout SimulatedImageLayout
+		public global::Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl.VideoFrameLayout SimulatedImageLayout
 		{
 			get
 			{
-				return ((global::TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl.VideoFrameLayout)(this["SimulatedImageLayout"]));
+				return ((global::Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl.VideoFrameLayout)(this["SimulatedImageLayout"]));
 			}
 			set
 			{

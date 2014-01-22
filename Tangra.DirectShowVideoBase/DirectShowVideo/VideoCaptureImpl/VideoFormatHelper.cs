@@ -9,7 +9,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using DirectShowLib;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
+namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 {
 	internal static class VideoFormatHelper
 	{

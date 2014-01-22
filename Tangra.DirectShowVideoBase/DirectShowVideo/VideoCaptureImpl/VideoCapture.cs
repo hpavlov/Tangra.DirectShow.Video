@@ -27,11 +27,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using ASCOM.DeviceInterface;
 using ASCOM.Utilities.Video;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
 using DirectShowLib;
-using TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
+using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
+namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 {
 	internal class VideoCapture
 	{

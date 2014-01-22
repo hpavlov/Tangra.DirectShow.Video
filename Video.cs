@@ -22,30 +22,20 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Text;
-using System.Windows.Forms;
+using ASCOM;
 using ASCOM.DeviceInterface;
-using ASCOM.DirectShow;
-using ASCOM.DirectShow.Properties;
-using Microsoft.Win32;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
 
-namespace ASCOM.DirectShow
+namespace Tangra.DirectShow
 {
 	[ComVisible(true)]
 	[ClassInterface(ClassInterfaceType.None)]
 	[ComSourceInterfaces(typeof(IVideo))]
 	[Guid("A53BFCE5-D453-4D33-977E-D8CE3BD4979C")]
 	[ProgId("Tangra.DirectShow.Video")]
-	public class Video : DirectShowVideoBase, IVideo
+	public class Video : DirectShowVideoBase.DirectShowVideo.DirectShowVideoBase, IVideo
 	{
 		/// <summary>
 		/// Category under which the device will be listed by the ASCOM Chooser
@@ -138,9 +128,9 @@ namespace ASCOM.DirectShow
 
 		public Video()
 		{
-			Properties.Settings.Default.Reload();
+			Settings.Default.Reload();
 
-			base.Initialize(Properties.Settings.Default);
+			base.Initialize(Settings.Default);
 		}
 
 		/// <exception cref="T:ASCOM.NotConnectedException">If the device is not connected and this information is only available when connected.</exception>

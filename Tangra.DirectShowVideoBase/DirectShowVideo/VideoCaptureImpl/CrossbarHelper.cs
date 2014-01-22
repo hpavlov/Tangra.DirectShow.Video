@@ -22,10 +22,10 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
 using DirectShowLib;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
+namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 {
     internal class CrossbarHelper
     {

@@ -8,11 +8,11 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
 using ASCOM.Utilities.Video;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
 using DirectShowLib;
-using TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
+using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo
+namespace Tangra.DirectShowVideoBase.DirectShowVideo
 {
 	public partial class ucDirectShowVideoSettings : UserControl
 	{

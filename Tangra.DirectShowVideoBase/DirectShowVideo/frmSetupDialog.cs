@@ -27,11 +27,11 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
-using TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
 using DirectShowLib;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo
+namespace Tangra.DirectShowVideoBase.DirectShowVideo
 {
 	[ComVisible(false)]
 	internal partial class frmSetupDialog : Form

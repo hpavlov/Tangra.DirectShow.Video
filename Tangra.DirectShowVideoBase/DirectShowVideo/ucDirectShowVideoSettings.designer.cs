@@ -1,4 +1,4 @@
-﻿namespace TACOS.DirectShowVideoBase.DirectShowVideo
+﻿namespace Tangra.DirectShowVideoBase.DirectShowVideo
 {
 	partial class ucDirectShowVideoSettings
 	{

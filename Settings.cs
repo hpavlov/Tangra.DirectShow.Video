@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Configuration;
-using ASCOM;
-using TACOS.DirectShowVideoBase.DirectShowVideo;
+﻿using System.Configuration;
+using Tangra.DirectShowVideoBase.DirectShowVideo;
 
 /************************
  * Do not modify this file. Do not delete this empty class definition.
@@ -23,7 +18,7 @@ using TACOS.DirectShowVideoBase.DirectShowVideo;
  * the correct device profile.
  * **********************/
 
-namespace ASCOM.DirectShow.Properties
+namespace Tangra.DirectShow
 {
 	[SettingsProvider(typeof(ASCOM.SettingsProvider))]
 	[ASCOM.DeviceId("ASCOM.DirectShow.Video", DeviceName = "Video Capture")]

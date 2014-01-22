@@ -27,9 +27,9 @@ using System.Drawing.Imaging;
 using System.Linq;
 using System.Text;
 using ASCOM.DeviceInterface;
-using TACOS.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
+using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
 
-namespace TACOS.DirectShowVideoBase.DirectShowVideo
+namespace Tangra.DirectShowVideoBase.DirectShowVideo
 {
 	internal class VideoFrame : IVideoFrame
 	{
