@@ -15,10 +15,7 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.Utils
 		{
 			Form appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
 
-			if (appFormWithMessageLoop == null)
-				appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null);
-
-			if (appFormWithMessageLoop != null)
+			if (appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired)
 			{
 				if (appFormWithMessageLoop.InvokeRequired)
 					appFormWithMessageLoop.Invoke(action, appFormWithMessageLoop);
