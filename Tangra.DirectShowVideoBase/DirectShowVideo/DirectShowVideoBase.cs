@@ -46,7 +46,6 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 	public abstract class DirectShowVideoBase
 	{
 		private VideoCaptureImpl.VideoCapture camera;
-		private DirectShowVideoSettings settings;
 
 		public DirectShowVideoBase()
 		{
@@ -55,8 +54,6 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 
 		public void Initialize(DirectShowVideoSettings settings)
 		{
-			this.settings = settings;
-
 			camera.Initialize(settings);
 		}
 
@@ -83,46 +80,6 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 			get
 			{
 				return camera.DeviceName;
-			}
-		}
-
-
-		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
-		public void SetupDialog()
-		{
-			UIThreadCaller.CallInUIThread((frm) => SetupDialogInternal(frm));
-		}
-
-		private void SetupDialogInternal(IWin32Window form)
-		{
-			string version = "1.0";
-			try
-			{
-				version = (this as IVideo).DriverVersion;
-			}
-			catch
-			{ }
-			
-			using (var setupDlg = new frmSetupDialog(settings, version))
-			{
-				IWin32Window ownerForm = Application.OpenForms
-					.Cast<Form>()
-					.FirstOrDefault(x => x != null && x.GetType().FullName == "ASCOM.Utilities.ChooserForm");
-
-				if (ownerForm == null)
-					ownerForm = form;
-
-				setupDlg.StartPosition = FormStartPosition.CenterParent;
-
-				if (setupDlg.ShowDialog(ownerForm) == DialogResult.OK)
-				{
-					settings.Save();
-
-					camera.ReloadSettings();
-
-					return;
-				}
-				settings.Reload();
 			}
 		}
 
@@ -320,7 +277,12 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 		{
 			AssertConnected();
 
-			UIThreadCaller.CallInUIThread((x) => camera.ShowDeviceProperties());
+			UIThreadCaller.Invoke((frm, args) => camera.ShowDeviceProperties());
+		}
+
+		protected void ReloadCameraSettings()
+		{
+			camera.ReloadSettings();
 		}
 	}
 }

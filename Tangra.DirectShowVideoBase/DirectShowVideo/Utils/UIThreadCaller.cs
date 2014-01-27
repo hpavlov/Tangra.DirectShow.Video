@@ -9,46 +9,72 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.Utils
 {
 	public class UIThreadCaller
 	{
-		public delegate void CallInUIThreadCallback(IWin32Window applicationWindow);
+		public delegate void CallInUIThreadCallback(IWin32Window applicationWindow, params object[] additionalParams);
 
-		public static void CallInUIThread(CallInUIThreadCallback action)
+		public static void Invoke(CallInUIThreadCallback action, params object[] additionalParams)
 		{
 			Form appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
 
-			if (appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired)
+			if (appFormWithMessageLoop != null && (Application.MessageLoop || hasOwnMessageLoop))
 			{
 				if (appFormWithMessageLoop.InvokeRequired)
-					appFormWithMessageLoop.Invoke(action, appFormWithMessageLoop);
+				{
+					appFormWithMessageLoop.Invoke(action, appFormWithMessageLoop, additionalParams);
+				}
 				else
-					action.Invoke(appFormWithMessageLoop);
+				{
+					action.Invoke(appFormWithMessageLoop, additionalParams);
+				}
 			}
-			else if (!Application.MessageLoop)
+			else if (!Application.MessageLoop && syncContext == null)
 			{
 				if (syncContext == null)
 				{
 					ThreadPool.QueueUserWorkItem(RunAppThread);
-					while (syncContext == null)
-						Thread.Sleep(10);
+					while (syncContext == null) Thread.Sleep(10);
 				}
 
 				if (syncContext != null)
-					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(null); }), null);
+				{
+					bool callFinished = false;
+					syncContext.Post(new SendOrPostCallback(delegate(object state)
+					{
+						action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
+						callFinished = true;
+					}), null);
+					while (!callFinished) Thread.Sleep(10);
+				}
 				else
-					action.Invoke(null);
+				{
+					action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
+				}
 			}
 			else
 			{
 				if (syncContext == null)
+				{
 					syncContext = new WindowsFormsSynchronizationContext();
+				}
 
 				if (syncContext != null)
-					syncContext.Post(new SendOrPostCallback(delegate(object state) { action.Invoke(null); }), null);
+				{
+					bool callFinished = false;
+					syncContext.Post(new SendOrPostCallback(delegate(object state)
+					{
+						action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
+						callFinished = true;
+					}), null);
+					while (!callFinished) Thread.Sleep(10);
+				}
 				else
-					action.Invoke(null);
+				{
+					action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
+				}
 			}
 		}
 
 		private static WindowsFormsSynchronizationContext syncContext;
+		private static bool hasOwnMessageLoop = false;
 
 		private static void RunAppThread(object state)
 		{
@@ -75,6 +101,8 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.Utils
 			form.Hide();
 
 			syncContext = new WindowsFormsSynchronizationContext();
+
+			hasOwnMessageLoop = true;
 		}
 	}
 }

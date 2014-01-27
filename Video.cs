@@ -23,10 +23,13 @@
 using System;
 using System.Collections;
 using System.Diagnostics;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using ASCOM;
 using ASCOM.DeviceInterface;
+using Tangra.DirectShowVideoBase.DirectShowVideo.Utils;
 
 namespace Tangra.DirectShow
 {
@@ -384,6 +387,51 @@ namespace Tangra.DirectShow
 			get
 			{
 				throw new PropertyNotImplementedException("Gammas", false);
+			}
+		}
+
+		/// <exception cref="T:ASCOM.DriverException">Must throw an exception if the call was not successful</exception>
+		public void SetupDialog()
+		{
+			UIThreadCaller.Invoke((frm, args) => SetupDialogInternal(frm));
+		}
+
+		private void SetupDialogInternal(IWin32Window form)
+		{
+			if (Connected)
+			{
+				// NOTE: The setup dialog builds a DirectShow graph in order to determine the crossbar settings of the connected device. This will however not work if there is 
+				//       already a running rendering graph. This is why we don't allow the setup dilaog to be displayed while DirectShow is connected to the camera
+				MessageBox.Show(
+					form,
+					"The setup dialog for this video driver is not available while connected to the device. Please disconnect first before changing the configuration.",
+					"Tangra Video Capture",
+					MessageBoxButtons.OK,
+					MessageBoxIcon.Error);
+
+				return;
+			}
+
+			using (var setupDlg = new frmSetupDialog(Settings.Default, DriverVersion))
+			{
+				IWin32Window ownerForm = Application.OpenForms
+					.Cast<Form>()
+					.FirstOrDefault(x => x != null && x.GetType().FullName == "ASCOM.Utilities.ChooserForm");
+
+				if (ownerForm == null)
+					ownerForm = form;
+
+				setupDlg.StartPosition = FormStartPosition.CenterParent;
+
+				if (setupDlg.ShowDialog(ownerForm) == DialogResult.OK)
+				{
+					Settings.Default.Save();
+
+					//base.ReloadCameraSettings();
+
+					return;
+				}
+				Settings.Default.Reload();
 			}
 		}
 	}

@@ -8,92 +8,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using Tangra.DirectShowVideoBase.DirectShowVideo;
+using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
+
 namespace Tangra.DirectShow.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0")]
-    internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
-        public static Settings Default {
-            get {
-                return defaultInstance;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string PreferredCaptureDevice {
-            get {
-                return ((string)(this["PreferredCaptureDevice"]));
-            }
-            set {
-                this["PreferredCaptureDevice"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Uncompressed")]
-        public string PreferredCompressorDevice {
-            get {
-                return ((string)(this["PreferredCompressorDevice"]));
-            }
-            set {
-                this["PreferredCompressorDevice"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("Color")]
-		public global::Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl.VideoFrameLayout SimulatedImageLayout
-		{
-            get {
-				return ((global::Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl.VideoFrameLayout)(this["SimulatedImageLayout"]));
-            }
-            set {
-                this["SimulatedImageLayout"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool UsesTunerCrossbar {
-            get {
-                return ((bool)(this["UsesTunerCrossbar"]));
-            }
-            set {
-                this["UsesTunerCrossbar"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int CrossbarOutputPin {
-            get {
-                return ((int)(this["CrossbarOutputPin"]));
-            }
-            set {
-                this["CrossbarOutputPin"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int CrossbarInputPin {
-            get {
-                return ((int)(this["CrossbarInputPin"]));
-            }
-            set {
-                this["CrossbarInputPin"] = value;
-            }
-        }
+	internal sealed partial class Settings : DirectShowVideoSettings
+	{
+ 
     }
 }
