@@ -28,6 +28,7 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using Tangra.DirectShowVideoBase.DirectShowVideo.Utils;
 using Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl;
 using Tangra.DirectShowVideoBase.DirectShowVideo;
 using DirectShowLib;
@@ -80,8 +81,14 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 
 		private CrossbarHelper crossbarHelper;
 
+		private static SynchronizationContext dxSyncContext = null;
+		private static int dxManagedThreadId = -1;
+
 		public DirectShowCapture(DirectShowVideoSettings settings)
 		{
+			dxManagedThreadId = Thread.CurrentThread.ManagedThreadId;
+			dxSyncContext = SynchronizationContext.Current;
+
 			crossbarHelper = new CrossbarHelper(settings);
 		}
 
@@ -749,12 +756,44 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 			}
 		}
 
+		private void DisplayCurrentDeviceFilterPropertyPage(IBaseFilter dev, IntPtr hwndOwner)
+		{
+			if (dxManagedThreadId != -1 && dxManagedThreadId != Thread.CurrentThread.ManagedThreadId)
+			{
+				if (dxSyncContext != null)
+				{
+					int counter = 0;
+					bool callFinished = false;
+					dxSyncContext.Post(new SendOrPostCallback(delegate(object state)
+					{
+						DisplayPropertyPage(dev, hwndOwner);
+						callFinished = true;
+					}), null);
+					while (!callFinished && counter < 300 /* 3 sec timeout */)
+					{
+						Thread.Sleep(10);
+						counter++;
+					}
+				}
+				else
+				{
+					// Cannot safely show the property pages because the DirectShow objects have been created on a different thread
+					UIThreadCaller.Invoke((frm, args) => MessageBox.Show(frm, "Cannot display the properties of a DirectShow device filter created on a different thread.", "Tangra Video Capture", MessageBoxButtons.OK, MessageBoxIcon.Error));
+				}
+			}
+			else
+				DisplayPropertyPage(dev, hwndOwner);
+		}
+
+
 		/// <summary>
 		/// Displays a property page for a filter
 		/// </summary>
 		/// <param name="dev">The filter for which to display a property page</param>
 		public static void DisplayPropertyPage(IBaseFilter dev, IntPtr hwndOwner)
 		{
+			Trace.WriteLine("Tangra.DirectShowVideoBase: Showing properties page on managed thread " + Thread.CurrentThread.ManagedThreadId);
+
 			//Get the ISpecifyPropertyPages for the filter
 			ISpecifyPropertyPages pProp = dev as ISpecifyPropertyPages;
 			int hr = 0;
@@ -805,7 +844,7 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.VideoCaptureImpl
 		public void ShowDeviceProperties()
 		{
 			if (deviceFilter != null)
-				DisplayPropertyPage(deviceFilter, IntPtr.Zero);
+				DisplayCurrentDeviceFilterPropertyPage(deviceFilter, IntPtr.Zero);
 		}
 
 	}

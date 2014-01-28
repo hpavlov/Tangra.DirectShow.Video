@@ -65,15 +65,22 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.Utils
 			}
 		}
 
-		private static void PostToSyncContext( Form appFormWithMessageLoop, CallInUIThreadCallback action, params object[] additionalParams)
+		private static bool PostToSyncContext( Form appFormWithMessageLoop, CallInUIThreadCallback action, params object[] additionalParams)
 		{
 			bool callFinished = false;
+			int counter = 0;
 			syncContext.Post(new SendOrPostCallback(delegate(object state)
 			{
 				action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
 				callFinished = true;
 			}), null);
-			while (!callFinished) Thread.Sleep(10);			
+			while (!callFinished && counter < 300 /* 3 sec timeout */)
+			{
+				Thread.Sleep(10);
+				counter++;
+			}
+
+			return callFinished;
 		}
 
 		private static WindowsFormsSynchronizationContext syncContext;
