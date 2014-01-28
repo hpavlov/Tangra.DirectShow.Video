@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Hristo Pavlov")]
 [assembly: AssemblyProduct("ASCOM Video DirectShow Capture")]
-[assembly: AssemblyCopyright("Copyright © 2013 Hristo Pavlov")]
+[assembly: AssemblyCopyright("Copyright © 2013-2014 Hristo Pavlov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -34,4 +34,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.6")]
+[assembly: AssemblyFileVersion("1.0.7")]
