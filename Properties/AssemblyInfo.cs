@@ -6,11 +6,11 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 //
-[assembly: AssemblyTitle("ASCOM.VideoCapture.Video")]
+[assembly: AssemblyTitle("Tangra.DirectShow.Video")]
 [assembly: AssemblyDescription("ASCOM Video capture driver for DirectShow enabled video devices")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Hristo Pavlov")]
-[assembly: AssemblyProduct("ASCOM Video DirectShow Capture")]
+[assembly: AssemblyProduct("Tangra Video DirectShow Capture")]
 [assembly: AssemblyCopyright("Copyright © 2013-2014 Hristo Pavlov")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -34,4 +34,4 @@ using System.Runtime.InteropServices;
 // by using the '*' as shown below:
 //
 [assembly: AssemblyVersion("1.0.0.0")]
-[assembly: AssemblyFileVersion("1.0.7")]
+[assembly: AssemblyFileVersion("1.0.8")]

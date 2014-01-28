@@ -14,19 +14,23 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.Utils
 		public static void Invoke(CallInUIThreadCallback action, params object[] additionalParams)
 		{
 			Form appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null && x.Owner == null);
+			if (appFormWithMessageLoop == null) appFormWithMessageLoop = Application.OpenForms.Cast<Form>().FirstOrDefault(x => x != null);
 
 			if (appFormWithMessageLoop != null && (Application.MessageLoop || hasOwnMessageLoop))
 			{
 				if (appFormWithMessageLoop.InvokeRequired)
 				{
-					appFormWithMessageLoop.Invoke(action, appFormWithMessageLoop, additionalParams);
+					if (hasOwnMessageLoop)
+						PostToSyncContext(appFormWithMessageLoop, action, additionalParams);
+					else
+						appFormWithMessageLoop.Invoke(action, appFormWithMessageLoop, additionalParams);
 				}
 				else
 				{
 					action.Invoke(appFormWithMessageLoop, additionalParams);
 				}
 			}
-			else if (!Application.MessageLoop && syncContext == null)
+			else if ((!Application.MessageLoop || appFormWithMessageLoop == null) && syncContext == null)
 			{
 				if (syncContext == null)
 				{
@@ -36,13 +40,7 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.Utils
 
 				if (syncContext != null)
 				{
-					bool callFinished = false;
-					syncContext.Post(new SendOrPostCallback(delegate(object state)
-					{
-						action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
-						callFinished = true;
-					}), null);
-					while (!callFinished) Thread.Sleep(10);
+					PostToSyncContext(appFormWithMessageLoop, action, additionalParams);
 				}
 				else
 				{
@@ -58,19 +56,24 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo.Utils
 
 				if (syncContext != null)
 				{
-					bool callFinished = false;
-					syncContext.Post(new SendOrPostCallback(delegate(object state)
-					{
-						action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
-						callFinished = true;
-					}), null);
-					while (!callFinished) Thread.Sleep(10);
+					PostToSyncContext(appFormWithMessageLoop, action, additionalParams);
 				}
 				else
 				{
 					action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
 				}
 			}
+		}
+
+		private static void PostToSyncContext( Form appFormWithMessageLoop, CallInUIThreadCallback action, params object[] additionalParams)
+		{
+			bool callFinished = false;
+			syncContext.Post(new SendOrPostCallback(delegate(object state)
+			{
+				action.Invoke(appFormWithMessageLoop != null && !appFormWithMessageLoop.InvokeRequired ? appFormWithMessageLoop : null, additionalParams);
+				callFinished = true;
+			}), null);
+			while (!callFinished) Thread.Sleep(10);			
 		}
 
 		private static WindowsFormsSynchronizationContext syncContext;
