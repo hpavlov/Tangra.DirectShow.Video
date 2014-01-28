@@ -36,6 +36,9 @@ Name: "{cf}\ASCOM\Uninstall\Video\Tangra Video Capture"
 
 [Files]
 Source: "D:\Hristo\ASCOM.DirectShow.Video\bin\Release\Tangra.DirectShow.Video.dll"; DestDir: "{app}"
+Source: "D:\Hristo\ASCOM.DirectShow.Video\bin\Release\Tangra.DirectShow.Video.dll.config"; DestDir: "{app}"
+Source: "D:\Hristo\ASCOM.DirectShow.Video\bin\Release\Tangra.DirectShow.VideoBase.dll"; DestDir: "{app}"
+Source: "D:\Hristo\ASCOM.DirectShow.Video\bin\Release\DirectShowLib-2005.dll"; DestDir: "{app}"
 ; Require a read-me HTML to appear after installation, maybe driver's Help doc
 Source: "D:\Hristo\ASCOM.DirectShow.Video\bin\Release\readme.html"; DestDir: "{app}"; Flags: isreadme
 ; Optional source files (COM and .NET aware)
