@@ -34,7 +34,6 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 	internal class VideoFrame : IVideoFrame
 	{
 		private long? frameNumber;
-		private string imageInfo;
 		private double? exposureDuration;
 		private string exposureStartTime;
 		private object pixels;
@@ -63,14 +62,12 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 
 			if (cameraFrame.ImageLayout == VideoFrameLayout.Monochrome)
 			{
-				rv.pixels = new int[height, width];
-
+				// int[width, height]
 				rv.pixels = (int[,])cameraFrame.Pixels;
 			}
 			else if (cameraFrame.ImageLayout == VideoFrameLayout.Color)
 			{
-				rv.pixels = new int[height, width, 3];
-
+				// int[width, height, plane]
 				rv.pixels = (int[, ,])cameraFrame.Pixels;
 			}
 			else if (cameraFrame.ImageLayout == VideoFrameLayout.BayerRGGB)
@@ -84,7 +81,6 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 			rv.frameNumber = cameraFrame.FrameNumber;
 			rv.exposureStartTime = null;
 			rv.exposureDuration = null;
-			rv.imageInfo = null;
 
 			return rv;
 		}
@@ -143,16 +139,12 @@ namespace Tangra.DirectShowVideoBase.DirectShowVideo
 			}
 		}
 
-		public string ImageInfo
-		{
-			get { return imageInfo; }
-		}
-
-
-
 		public System.Collections.ArrayList ImageMetadata
 		{
-			get { throw new NotImplementedException(); }
+			get
+			{
+				return new System.Collections.ArrayList();
+			}
 		}
 	}
 }
