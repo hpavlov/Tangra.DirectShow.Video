@@ -233,7 +233,7 @@ namespace Tangra.DirectShow
 			[DebuggerStepThrough]
 			get
 			{
-				throw new PropertyNotImplementedException("SensorName", false);
+				return "Unknown";
 			}
 		}
 
