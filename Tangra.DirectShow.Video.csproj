@@ -174,9 +174,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="readme.html">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="tangra-video.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -5,8 +5,8 @@
 [Setup]
 AppID={{d4a590c6-6563-4826-b17e-6d6730e2e427}
 AppName=Tangra Video Capture Driver
-AppVerName=Tangra Video Capture Driver 1.0.8
-AppVersion=1.0.8
+AppVerName=Tangra Video Capture Driver 1.0.10
+AppVersion=1.0.10
 AppPublisher=Hristo Pavlov <hristo_dpavlov@yahoo.com>
 AppPublisherURL=mailto:hristo_dpavlov@yahoo.com
 AppSupportURL=http://tech.groups.yahoo.com/group/ASCOM-Talk/
